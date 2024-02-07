@@ -138,7 +138,7 @@ def find_ten_most_frequent_words(list_dict_words_from_api):
 
 def generate_quiz_json(short_list, long_list, filename):
     quiz = []
-    long_definitions = [d['definition'] for d in long_list]
+    long_word_list = [d['word'] for d in long_list]
     fallback_definitions = [
         "A process or set of rules to be followed in calculations or other problem-solving operations, especially by a computer.",
         "A system of ordered marks at fixed intervals used as a reference standard in measurement.",
@@ -156,18 +156,18 @@ def generate_quiz_json(short_list, long_list, filename):
         word = item["word"]
         correct_definition = item["definition"]
 
-        filtered_definitions = [d for d in long_definitions if d != correct_definition]
+        filtered_words = [d for d in long_word_list if d != correct_definition]
 
         # Ensure there are enough definitions to choose from
-        if len(filtered_definitions) < 3:
+        if len(filtered_words) < 3:
             # If not enough, supplement with random choices from the fallback list
-            needed = 3 - len(filtered_definitions)
+            needed = 3 - len(filtered_words)
             fallback_options = random.sample(fallback_definitions, needed)
-            options = filtered_definitions + fallback_options
+            options = filtered_words + fallback_options
         else:
             # If enough, simply sample 3 from the filtered list
-            options = random.sample(filtered_definitions, 3)
-        options.append(correct_definition)
+            options = random.sample(filtered_words, 3)
+        options.append(word)
         random.shuffle(options)
 
         quiz.append({
