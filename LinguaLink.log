@@ -4,3 +4,9 @@
 2024-02-07 17:06:00,740-INFO-FILE:_internal.py-FUNC:_log-LINE:187- * Restarting with stat
 2024-02-07 17:06:02,125-WARNING-FILE:_internal.py-FUNC:_log-LINE:187- * Debugger is active!
 2024-02-07 17:06:02,128-INFO-FILE:_internal.py-FUNC:_log-LINE:187- * Debugger PIN: 119-265-232
+2024-02-07 18:19:28,062-INFO-FILE:_internal.py-FUNC:_log-LINE:187-[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-02-07 18:19:28,063-INFO-FILE:_internal.py-FUNC:_log-LINE:187-[33mPress CTRL+C to quit[0m
+2024-02-07 18:19:28,064-INFO-FILE:_internal.py-FUNC:_log-LINE:187- * Restarting with stat
+2024-02-07 18:19:29,535-WARNING-FILE:_internal.py-FUNC:_log-LINE:187- * Debugger is active!
+2024-02-07 18:19:29,540-INFO-FILE:_internal.py-FUNC:_log-LINE:187- * Debugger PIN: 119-265-232
