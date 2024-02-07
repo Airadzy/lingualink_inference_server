@@ -27,10 +27,9 @@ def load_config(config_filename):
         return json_dict
 
 
-def get_difficulty_level(json_file_path):
-    with open(json_file_path, 'r') as json_file:
-        json_content = json.load(json_file)
-        difficulty_level = json_content.get("difficulty", "")
+def get_difficulty_level(json_data):
+    
+    difficulty_level = json_data.get("difficulty", "")
     return difficulty_level
 
 
