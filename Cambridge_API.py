@@ -62,6 +62,7 @@ def scrape_word(word):
                 '.epp-xref.dxref.A1, .epp-xref.dxref.A2, .epp-xref.dxref.B1, .epp-xref.dxref.B2, .epp-xref.dxref.C1, .epp-xref.dxref.C2')
             if difficulty_span:
                 difficulty_level = difficulty_span.get_text(strip=True)
+                return {"word": word, "difficulty_level": difficulty_level, "definition": definition}
             else:
                 # Attempt to find difficulty level using the .gb.dgc class as a fallback
                 difficulty_span_fallback = soup.select_one('.gc.dgc')
@@ -167,9 +168,7 @@ def model(json_file_path):
 
     unique_words = split_json_file_content_into_lines(json_file_path)
     difficulty_level = get_difficulty_level(json_file_path)
-    # config = load_config(config_filename)
     words = process_words(unique_words)
-    # print("words", words)
     with multiprocessing.Pool() as pool:
         word_dictionary_list = pool.map(scrape_word, words)
         word_dictionary_list = [word_dict for word_dict in word_dictionary_list if word_dict is not None]

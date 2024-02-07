@@ -1,15 +1,19 @@
 import requests
+import json
 
 url = "http://54.236.18.163:8080/generate-quiz"
 
-data = {
-    "difficulty": "B",
-    "article": "A Tour of Machine Learning Algorithms Machine Learning Algorithms algorithms in the field to get a feeling of what methods are available.\n\nThere are so many algorithms that it can feel overwhelming when algorithm names are thrown around and you are expected to just know what they are and where they fit.\n\nI want to give you two ways to think about and categorize the algorithms you may come across in the field.\n\nThe first is a grouping of algorithms by their learning style."
-}
+# Read the content of the JSON file
+with open("content.json", "r") as json_file:
+    content = json.load(json_file)
 
-response = requests.post(url, json=data)
-try:
+# Send a POST request with the JSON content as data
+response = requests.post(url, json=content)
+
+# Check if the request was successful
+if response.status_code == 200:
+    # Print the response from the server
     print(response.json())
-except requests.exceptions.JSONDecodeError as e:
-    print("Error decoding JSON response:", e)
-    print("Response text:", response.text)
+else:
+    # Print an error message if the request failed
+    print("Error:", response.text)
