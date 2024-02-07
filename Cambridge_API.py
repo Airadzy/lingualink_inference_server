@@ -121,16 +121,13 @@ def final_list(level, list_A, list_B, list_C):
 def find_ten_most_frequent_words(list_dict_words_from_api):
     # 'count' is the frequency
     kaggle_df = pd.read_csv('unigram_freq.csv')
-    dict_df = pd.DataFrame(list_dict_words_from_api)
+    api_df = pd.DataFrame(list_dict_words_from_api)
+    api_df["word"] = api_df["word"].str.lower()
 
-    # to match to the Kaggle's dataset
-    dict_df["word"] = dict_df["word"].str.lower()
+    merged_df = pd.merge(api_df, kaggle_df, on="word", how="left")
 
-    matched_df = pd.merge(dict_df, kaggle_df, on="word", how="left")
+    sorted_df = merged_df.sort_values(by='count', ascending=False)
 
-    matched_df["count"] = matched_df["count"].fillna(0)
-
-    sorted_df = matched_df.sort_values(by='count', ascending=False)
     sorted_filtered_df = sorted_df.drop('count', axis=1)
 
     # Save the top 10 words to a variable
