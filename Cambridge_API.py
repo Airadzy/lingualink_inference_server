@@ -34,13 +34,11 @@ def get_difficulty_level(json_file_path):
     return difficulty_level
 
 
-def split_json_file_content_into_lines(json_file_path):
-    with open(json_file_path, 'r') as json_file:
-        json_data = json.load(json_file)
-        json_article = json_data.get("article", "")
-        json_article = re.sub(r'[^\w\s-]', '', json_article).lower()
-        words = re.findall(r'\b\w+\b', json_article)
-        unique_words = list(set(words))
+def split_json_file_content_into_lines(json_data):
+    json_article = json_data.get("article", "")
+    json_article = re.sub(r'[^\w\s-]', '', json_article).lower()
+    words = re.findall(r'\b\w+\b', json_article)
+    unique_words = list(set(words))
     return unique_words
 
 
