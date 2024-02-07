@@ -3,6 +3,9 @@ import logging
 import spacy
 import json
 from bs4 import BeautifulSoup
+import re
+import multiprocessing
+import pandas as pd
 
 log_filename = 'LinguaLink.log'
 config_filename = "config.json"
@@ -11,16 +14,6 @@ logging.basicConfig(filename=log_filename,
                     format='%(asctime)s-%(levelname)s-FILE:%(filename)s-FUNC:%(funcName)s-LINE:%(lineno)d-%(message)s',
                     level=logging.INFO)
 
-def split_json_file_content_into_lines(json_file_path):
-    with open(json_file_path, 'r') as json_file:
-        json_data = json.load(json_file)
-    content = json_data.get("content", "")
-    lines = content.split('\n')
-    lines = [line.strip() for line in lines]
-    lines = list(filter(None, lines))
-    return lines
-json_file_path = 'content.json'
-lines = split_json_file_content_into_lines(json_file_path)
 
 def load_config(config_filename):
     """
@@ -33,16 +26,35 @@ def load_config(config_filename):
         return json_dict
 
 
-def scrape_cambridge(words):
-    results = []
+def get_difficulty_level(json_file_path):
+    with open(json_file_path, 'r') as json_file:
+        json_content = json.load(json_file)
+        difficulty_level = json_content.get("difficulty", "")
+    return difficulty_level
+
+
+def split_json_file_content_into_lines(json_file_path):
+    with open(json_file_path, 'r') as json_file:
+        json_data = json.load(json_file)
+        json_article = json_data.get("article", "")
+        json_article = re.sub(r'[^\w\s-]', '', json_article).lower()
+        words = re.findall(r'\b\w+\b', json_article)
+        unique_words = list(set(words))
+    return unique_words
+
+
+def scrape_word(word):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
-    for word in words:
-        url = f"https://dictionary.cambridge.org/dictionary/english/{word}"
-        response = requests.get(url, headers=headers)
 
-        if response.status_code == 200:
-            soup = BeautifulSoup(response.content, 'html.parser')
+    url = f"https://dictionary.cambridge.org/dictionary/english/{word}"
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+
+        soup = BeautifulSoup(response.content, 'html.parser')
+        definition_div = soup.find('div', class_='def ddef_d db')
+        if definition_div:
+            definition = definition_div.text
 
             difficulty_level = "Difficulty level not found"
             difficulty_span = soup.select_one(
@@ -57,16 +69,16 @@ def scrape_cambridge(words):
                 else:
                     difficulty_level = "B"
 
-            definition_div = soup.find('div', class_='def ddef_d db')
-            definition = definition_div.text if definition_div else "Definition not found"
-
-            results.append({"word": word, "difficulty_level": difficulty_level[0], "definition": definition})
-        else:
-            pass
-    return results
+            return {"word": word, "difficulty_level": difficulty_level, "definition": definition}
 
 
-def process_words(sentence):
+def chunks(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
+
+
+def process_words(words):
     """
 
     :param sentence: input phrase
@@ -76,11 +88,11 @@ def process_words(sentence):
     nlp = spacy.load("en_core_web_sm")
 
     lemmatized_words = []
-    doc = nlp(sentence)
-    for token in doc:
-        lemmatized_words.append(token.lemma_)
-    words_list = list(set(lemmatized_words))
-    return words_list
+    for batch_words in chunks(words, 100):
+        doc = nlp(" ".join(batch_words))
+        lemmatized_words.extend([token.lemma_ for token in doc])
+    unique_words_list = list(set(lemmatized_words))
+    return unique_words_list
 
 
 def filter_difficulty_level(word_dictionaries):
@@ -108,17 +120,49 @@ def final_list(level, list_A, list_B, list_C):
         return list_B + list_C
 
 
+def find_ten_most_frequent_words(list_dict_words_from_api):
+    # 'count' is the frequency
+    kaggle_df = pd.read_csv('unigram_freq.csv')
+    dict_df = pd.DataFrame(list_dict_words_from_api)
+
+    # to match to the Kaggle's dataset
+    dict_df["word"] = dict_df["word"].str.lower()
+
+    matched_df = pd.merge(dict_df, kaggle_df, on="word", how="left")
+
+    matched_df["count"] = matched_df["count"].fillna(0)
+
+    sorted_df = matched_df.sort_values(by='count', ascending=False)
+    sorted_filtered_df = sorted_df.drop('count', axis=1)
+
+    # Save the top 10 words to a variable
+    top_10_words_df = sorted_filtered_df.head(10)
+
+    # Return back to a list of dictionaries
+    dict_10_frequent_words = top_10_words_df.to_dict(orient="records")
+    return dict_10_frequent_words
+
+
 def main():
     """
     main function running script
     :return:
     """
-    config = load_config(config_filename)
-    example = "eating eats eat ate adjustable rafting ability meeting better hello film movie radio"
-    words_list = process_words(example)
-    word_dictionary_list = scrape_cambridge(words_list)
+    json_file_path = 'content.json'
+    unique_words = split_json_file_content_into_lines(json_file_path)
+    difficulty_level = get_difficulty_level(json_file_path)
+    # config = load_config(config_filename)
+    words = process_words(unique_words)
+    print("words", words)
+    with multiprocessing.Pool() as pool:
+        word_dictionary_list = pool.map(scrape_word, words)
+
+    print("word dictionary list", word_dictionary_list)
     list_A, list_B, list_C = filter_difficulty_level(word_dictionary_list)
-    processed_list = final_list("B", list_A, list_B, list_C)
+    processed_list = final_list(difficulty_level, list_A, list_B, list_C)
+    # print(processed_list)
+    dict_10_frequent_words = find_ten_most_frequent_words(processed_list)
+    print(dict_10_frequent_words)
 
 
 if __name__ == "__main__":
