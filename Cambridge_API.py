@@ -158,15 +158,15 @@ def generate_quiz_json(short_list,long_list,filename):
             'correct': correct_definition
         })
 
-    with open(filename, 'w') as json_file:
-        json.dump(quiz, json_file, indent=4)
+    return quiz
 
-def main():
+
+def model(json_file_path):
     """
     main function running script
     :return:
     """
-    json_file_path = 'content.json'
+
     unique_words = split_json_file_content_into_lines(json_file_path)
     difficulty_level = get_difficulty_level(json_file_path)
     # config = load_config(config_filename)
@@ -181,9 +181,5 @@ def main():
     processed_list = final_list(difficulty_level, list_A, list_B, list_C)
     # print(processed_list)
     dict_10_frequent_words = find_ten_most_frequent_words(processed_list)
-    print(dict_10_frequent_words)
-    generate_quiz_json(dict_10_frequent_words, processed_list, "quiz.json")
-
-
-if __name__ == "__main__":
-    main()
+    json_file = generate_quiz_json(dict_10_frequent_words, processed_list, "quiz.json")
+    return json_file
