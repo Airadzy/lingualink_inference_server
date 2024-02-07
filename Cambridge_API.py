@@ -154,16 +154,15 @@ def generate_quiz_json(short_list, long_list, filename):
 
     for item in short_list:
         word = item["word"]
-        correct_definition = item["definition"]
+        correct_definition = item["word"]
 
         filtered_words = [d for d in long_word_list if d != correct_definition]
 
         # Ensure there are enough definitions to choose from
         if len(filtered_words) < 3:
             # If not enough, supplement with random choices from the fallback list
-            needed = 3 - len(filtered_words)
-            fallback_options = random.sample(fallback_definitions, needed)
-            options = filtered_words + fallback_options
+            fallback_options = random.sample(fallback_definitions, 3)
+            options = fallback_options
         else:
             # If enough, simply sample 3 from the filtered list
             options = random.sample(filtered_words, 3)
