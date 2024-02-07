@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 import re
 import multiprocessing
 import pandas as pd
+import random
 
 log_filename = 'LinguaLink.log'
 config_filename = "config.json"
@@ -139,6 +140,26 @@ def find_ten_most_frequent_words(list_dict_words_from_api):
     dict_10_frequent_words = top_10_words_df.to_dict(orient="records")
     return dict_10_frequent_words
 
+def generate_quiz_json(short_list,long_list,filename):
+    quiz=[]
+    long_definitions = [d['definition'] for d in long_list]
+
+    for item in short_list:
+        word = item["word"]
+        correct_definition = item["definition"]
+
+        options = random.sample([d for d in long_definitions if d != correct_definition], 3)
+        options.append(correct_definition)
+        random.shuffle(options)
+
+        quiz.append({
+            'word': word,
+            'options': options,
+            'correct': correct_definition
+        })
+
+    with open(filename, 'w') as json_file:
+        json.dump(quiz, json_file, indent=4)
 
 def main():
     """
@@ -150,17 +171,18 @@ def main():
     difficulty_level = get_difficulty_level(json_file_path)
     # config = load_config(config_filename)
     words = process_words(unique_words)
-    print("words", words)
+    # print("words", words)
     with multiprocessing.Pool() as pool:
         word_dictionary_list = pool.map(scrape_word, words)
         word_dictionary_list = [word_dict for word_dict in word_dictionary_list if word_dict is not None]
 
-    print("word dictionary list", word_dictionary_list)
+    # print("word dictionary list", word_dictionary_list)
     list_A, list_B, list_C = filter_difficulty_level(word_dictionary_list)
     processed_list = final_list(difficulty_level, list_A, list_B, list_C)
     # print(processed_list)
     dict_10_frequent_words = find_ten_most_frequent_words(processed_list)
     print(dict_10_frequent_words)
+    generate_quiz_json(dict_10_frequent_words, processed_list, "quiz.json")
 
 
 if __name__ == "__main__":

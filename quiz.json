@@ -1,0 +1,102 @@
+[
+    {
+        "word": "listing",
+        "options": [
+            "a list of information that is published regularly, or an item on this list: ",
+            "a car: ",
+            "a very large snake that kills animals for food by wrapping itself around them and crushing them",
+            "a guess of a number that is not exact but that is close: "
+        ],
+        "correct": "a list of information that is published regularly, or an item on this list: "
+    },
+    {
+        "word": "audio",
+        "options": [
+            "an arrangement of data in which most values are near the centre of the range and gradually become fewer towards each end, shown in a graph as the shape of a bell: ",
+            "a group of things or people acting or taken together as a whole, especially a group of musicians who regularly play together: ",
+            "The median value is the middle one in a set of values arranged in order of size: ",
+            "connected with sound and the recording and broadcasting of sound: "
+        ],
+        "correct": "connected with sound and the recording and broadcasting of sound: "
+    },
+    {
+        "word": "auto",
+        "options": [
+            "a system for naming and organizing things, especially plants and animals, into groups that share similar qualities",
+            "a graph in which each mark represents a pair of values relating two sets of data (= numbers) drawn on a coordinate plane (= area with vertical and horizontal measures)",
+            "An analog recording is one that is made by changing the sound waves into electrical signals of the same type. An analog signal is a signal of this type: ",
+            "a car: "
+        ],
+        "correct": "a car: "
+    },
+    {
+        "word": "favorite",
+        "options": [
+            "US spelling of \nfavourite ",
+            "a rope, formed into a ring at one end, that can be tightened by pulling the other end: ",
+            "a guess of a number that is not exact but that is close: ",
+            "a short, high sound made by a bird"
+        ],
+        "correct": "US spelling of \nfavourite "
+    },
+    {
+        "word": "template",
+        "options": [
+            "spreading out from a central point: ",
+            "someone whose job is to estimate the cost of something: ",
+            "a pattern made of metal, plastic, or paper, used for making many copies of a shape or to help cut material accurately",
+            "connected with sound and the recording and broadcasting of sound: "
+        ],
+        "correct": "a pattern made of metal, plastic, or paper, used for making many copies of a shape or to help cut material accurately"
+    },
+    {
+        "word": "specialty",
+        "options": [
+            "a single piece of information",
+            "a collection of separate sets of information that is treated as a single unit by a computer: ",
+            "someone whose job is to estimate the cost of something: ",
+            "a product that is extremely good in a particular place: "
+        ],
+        "correct": "a product that is extremely good in a particular place: "
+    },
+    {
+        "word": "python",
+        "options": [
+            "a period of study with a tutor involving one student or a small group",
+            "one of the two games that are played to decide who will take part in the final game of a competition: ",
+            "a very large snake that kills animals for food by wrapping itself around them and crushing them",
+            "a quantity that has both size and direction: "
+        ],
+        "correct": "a very large snake that kills animals for food by wrapping itself around them and crushing them"
+    },
+    {
+        "word": "tutorial",
+        "options": [
+            "(especially in mathematics) a formal statement that can be shown to be true by logic: ",
+            "a system of ways of doing, teaching, or studying something: ",
+            "a quantity that has both size and direction: ",
+            "a period of study with a tutor involving one student or a small group"
+        ],
+        "correct": "a period of study with a tutor involving one student or a small group"
+    },
+    {
+        "word": "algorithm",
+        "options": [
+            "a pattern made of metal, plastic, or paper, used for making many copies of a shape or to help cut material accurately",
+            "a pile of things arranged one on top of another: ",
+            "a set of mathematical instructions or rules that, especially if given to a computer, will help to calculate an answer to a problem: ",
+            "a single piece of information"
+        ],
+        "correct": "a set of mathematical instructions or rules that, especially if given to a computer, will help to calculate an answer to a problem: "
+    },
+    {
+        "word": "semi",
+        "options": [
+            "a car: ",
+            "(relating to) a sentence, often starting with \"if\" or \"unless\", in which one half expresses something which depends on the other half: ",
+            "one of the two games that are played to decide who will take part in the final game of a competition: ",
+            "US spelling of \nneighbour "
+        ],
+        "correct": "one of the two games that are played to decide who will take part in the final game of a competition: "
+    }
+]
