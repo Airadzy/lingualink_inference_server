@@ -88,7 +88,7 @@ def process_words(words):
     lemmatized_words = []
     for batch_words in chunks(words, 100):
         doc = nlp(" ".join(batch_words))
-        lemmatized_words.extend([token.lemma_ for token in doc if not token.is_stop and len(token.lemma_)>2])
+        lemmatized_words.extend([token.lemma_ for token in doc if not token.is_stop and len(token.lemma_) > 2])
     unique_words_list = list(set(lemmatized_words))
     return unique_words_list
 
@@ -140,8 +140,9 @@ def find_ten_most_frequent_words(list_dict_words_from_api):
     dict_10_frequent_words = top_10_words_df.to_dict(orient="records")
     return dict_10_frequent_words
 
-def generate_quiz_json(short_list,long_list,filename):
-    quiz=[]
+
+def generate_quiz_json(short_list, long_list, filename):
+    quiz = []
     long_definitions = [d['definition'] for d in long_list]
 
     for item in short_list:
