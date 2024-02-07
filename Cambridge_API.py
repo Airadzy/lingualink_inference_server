@@ -117,7 +117,11 @@ def final_list(level, list_A, list_B, list_C):
 
 
 def find_ten_most_frequent_words(list_dict_words_from_api):
-    # 'count' is the frequency
+    """
+    Function to take only the twn most frequent words from the list
+    :param list_dict_words_from_api:
+    :return:
+    """
     kaggle_df = pd.read_csv('unigram_freq.csv')
     api_df = pd.DataFrame(list_dict_words_from_api)
     api_df["word"] = api_df["word"].str.lower()
@@ -128,10 +132,8 @@ def find_ten_most_frequent_words(list_dict_words_from_api):
 
     sorted_filtered_df = sorted_df.drop('count', axis=1)
 
-    # Save the top 10 words to a variable
     top_10_words_df = sorted_filtered_df.head(10)
 
-    # Return back to a list of dictionaries
     dict_10_frequent_words = top_10_words_df.to_dict(orient="records")
     return dict_10_frequent_words
 
@@ -154,9 +156,10 @@ def generate_quiz_json(short_list, long_list, filename):
 
     for item in short_list:
         word = item["word"]
-        correct_definition = item["word"]
+        correct_word = item["word"]
+        correct_definition = item["definition"]
 
-        filtered_words = [d for d in long_word_list if d != correct_definition]
+        filtered_words = [d for d in long_word_list if d != correct_word]
 
         # Ensure there are enough definitions to choose from
         if len(filtered_words) < 3:
@@ -166,7 +169,7 @@ def generate_quiz_json(short_list, long_list, filename):
         else:
             # If enough, simply sample 3 from the filtered list
             options = random.sample(filtered_words, 3)
-        options.append(word)
+        options.append(correct_word)
         random.shuffle(options)
 
         quiz.append({
