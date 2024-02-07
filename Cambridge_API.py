@@ -28,7 +28,7 @@ def load_config(config_filename):
 
 
 def get_difficulty_level(json_data):
-    
+
     difficulty_level = json_data.get("difficulty", "")
     return difficulty_level
 
@@ -139,12 +139,34 @@ def find_ten_most_frequent_words(list_dict_words_from_api):
 def generate_quiz_json(short_list, long_list, filename):
     quiz = []
     long_definitions = [d['definition'] for d in long_list]
+    fallback_definitions = [
+        "A process or set of rules to be followed in calculations or other problem-solving operations, especially by a computer.",
+        "A system of ordered marks at fixed intervals used as a reference standard in measurement.",
+        "An official agreement intended to resolve a dispute or conflict.",
+        "A device or piece of equipment designed to perform a specific task, typically by mechanical or electronic means.",
+        "A natural or artificial substance used to add color to or change the color of something.",
+        "The action or process of transmitting something or the state of being transmitted.",
+        "A person who advocates for or supports a cause or policy.",
+        "The state of being free from illness or injury.",
+        "A detailed analysis and assessment of something, especially for study or publication.",
+        "The natural environment of an animal, plant, or other organism."
+    ]
 
     for item in short_list:
         word = item["word"]
         correct_definition = item["definition"]
 
-        options = random.sample([d for d in long_definitions if d != correct_definition], 3)
+        filtered_definitions = [d for d in long_definitions if d != correct_definition]
+
+        # Ensure there are enough definitions to choose from
+        if len(filtered_definitions) < 3:
+            # If not enough, supplement with random choices from the fallback list
+            needed = 3 - len(filtered_definitions)
+            fallback_options = random.sample(fallback_definitions, needed)
+            options = filtered_definitions + fallback_options
+        else:
+            # If enough, simply sample 3 from the filtered list
+            options = random.sample(filtered_definitions, 3)
         options.append(correct_definition)
         random.shuffle(options)
 
