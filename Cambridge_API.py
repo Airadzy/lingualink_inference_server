@@ -35,7 +35,9 @@ def get_difficulty_level(json_data):
 
 def split_json_file_content_into_lines(json_data):
     json_article = json_data.get("article", "")
-    json_article = re.sub(r'[^\w\s-]', '', json_article).lower()
+    json_article = re.sub(r"'s\b", '', json_article).lower()
+    json_article = re.sub(r'-', ' ', json_article)
+    json_article = re.sub(r'[^\w\s]', '', json_article)
     words = re.findall(r'\b\w+\b', json_article)
     unique_words = list(set(words))
     return unique_words
@@ -59,13 +61,13 @@ def scrape_word(word):
                 '.epp-xref.dxref.A1, .epp-xref.dxref.A2, .epp-xref.dxref.B1, .epp-xref.dxref.B2, .epp-xref.dxref.C1, .epp-xref.dxref.C2')
             if difficulty_span:
                 difficulty_level = difficulty_span.get_text(strip=True)
-                return {"word": word, "difficulty_level": difficulty_level, "definition": definition}
+                return {"word": word, "difficulty_level": difficulty_level[0], "definition": definition}
             else:
                 # Attempt to find difficulty level using the .gb.dgc class as a fallback
                 difficulty_span_fallback = soup.select_one('.gc.dgc')
                 if difficulty_span_fallback:
                     difficulty_level = difficulty_span_fallback.get_text(strip=True)
-                    return {"word": word, "difficulty_level": difficulty_level, "definition": definition}
+                    return {"word": word, "difficulty_level": difficulty_level[0], "definition": definition}
 
 
 def chunks(lst, n):
