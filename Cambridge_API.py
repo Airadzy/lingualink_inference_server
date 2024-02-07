@@ -66,10 +66,7 @@ def scrape_word(word):
                 difficulty_span_fallback = soup.select_one('.gc.dgc')
                 if difficulty_span_fallback:
                     difficulty_level = difficulty_span_fallback.get_text(strip=True)
-                else:
-                    difficulty_level = "B"
-
-            return {"word": word, "difficulty_level": difficulty_level, "definition": definition}
+                    return {"word": word, "difficulty_level": difficulty_level, "definition": definition}
 
 
 def chunks(lst, n):
@@ -90,7 +87,7 @@ def process_words(words):
     lemmatized_words = []
     for batch_words in chunks(words, 100):
         doc = nlp(" ".join(batch_words))
-        lemmatized_words.extend([token.lemma_ for token in doc])
+        lemmatized_words.extend([token.lemma_ for token in doc if not token.is_stop and len(token.lemma_)>2])
     unique_words_list = list(set(lemmatized_words))
     return unique_words_list
 
@@ -156,6 +153,7 @@ def main():
     print("words", words)
     with multiprocessing.Pool() as pool:
         word_dictionary_list = pool.map(scrape_word, words)
+        word_dictionary_list = [word_dict for word_dict in word_dictionary_list if word_dict is not None]
 
     print("word dictionary list", word_dictionary_list)
     list_A, list_B, list_C = filter_difficulty_level(word_dictionary_list)
