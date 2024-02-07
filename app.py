@@ -4,7 +4,7 @@ import Cambridge_API
 app = Flask(__name__)
 
 
-@app.route("/generate-quiz")
+@app.route("/generate-quiz",methods=["POST"])
 def generate_quiz_file():
     data = request.get_json()
     json_file_path = data.get("json_file_path", "content.json")
