@@ -1,8 +1,9 @@
 from flask import Flask, jsonify, request
 import Cambridge_API
+from flask_cors import CORS
 
 app = Flask(__name__)
-
+CORS(app)
 
 @app.route("/generate-quiz", methods=["POST"])
 def generate_quiz_file():

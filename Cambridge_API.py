@@ -42,6 +42,17 @@ def split_json_file_content_into_lines(json_data):
     unique_words = list(set(words))
     return unique_words
 
+def rapid_api(word):
+    url = "https://twinword-language-scoring.p.rapidapi.com/word/"
+    querystring = {"entry": word}
+
+    headers = {
+        "X-RapidAPI-Key": "19611f27acmsh56c285c18852baep1f6f42jsnbb2656e69b13",
+        "X-RapidAPI-Host": "twinword-language-scoring.p.rapidapi.com"
+    }
+
+    response = requests.get(url, headers=headers, params=querystring)
+
 
 def scrape_word(word):
     headers = {

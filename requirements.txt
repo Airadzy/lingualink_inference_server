@@ -3,3 +3,4 @@ spacy
 bs4
 pandas
 Flask
+flask_cors
