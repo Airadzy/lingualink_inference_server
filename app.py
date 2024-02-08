@@ -3,16 +3,15 @@ import Cambridge_API
 from flask_cors import CORS,cross_origin
 
 app = Flask(__name__)
-CORS(app, support_credentials=True)
-
+CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 @app.route("/generate-quiz", methods=["POST"])
-@cross_origin(supports_credentials=True)
+@cross_origin()
 def generate_quiz_file():
     json_file_path = request.get_json()
     quiz_data = Cambridge_API.model(json_file_path)
-    response = make_response(jsonify(quiz_data))
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    return response
+    # response.headers.add('Access-Control-Allow-Origin', '*')
+    return jsonify(quiz_data)
 
 
 if __name__ == "__main__":
