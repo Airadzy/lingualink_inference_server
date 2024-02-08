@@ -157,9 +157,10 @@ def generate_quiz_json(short_list, long_list, filename):
     ]
 
     for item in short_list:
-        word = item["word"]
-        correct_word = item["word"]
-        correct_definition = item["definition"]
+        word_lowered = item["word"]
+        word = word_lowered.capitalize()
+        correct_word = item["word"].capitalize()
+        correct_definition = item["definition"].capitalize()
 
         filtered_words = [d for d in long_word_list if d != correct_word]
 
