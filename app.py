@@ -1,11 +1,12 @@
 from flask import Flask, jsonify, request, make_response
 import Cambridge_API
-from flask_cors import CORS
+from flask_cors import CORS,cross_origin
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, support_credentials=True)
 
 @app.route("/generate-quiz", methods=["POST"])
+@cross_origin(supports_credentials=True)
 def generate_quiz_file():
     json_file_path = request.get_json()
     quiz_data = Cambridge_API.model(json_file_path)
