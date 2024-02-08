@@ -174,10 +174,12 @@ def generate_quiz_json(short_list, long_list, filename):
         options.append(correct_word)
         random.shuffle(options)
 
+        capitalized_options = [option.capitalize() for option in options]
+
         quiz.append({
-            'word': word,
-            'options': options,
-            'correct': correct_definition
+            'word': word.capitalize(),
+            'options': capitalized_options,
+            'correct': correct_definition.capitalize()
         })
 
     return quiz
