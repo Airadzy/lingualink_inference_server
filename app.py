@@ -10,7 +10,6 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 def generate_quiz_file():
     json_file_path = request.get_json()
     quiz_data = Cambridge_API.model(json_file_path)
-    # response.headers.add('Access-Control-Allow-Origin', '*')
     return jsonify(quiz_data)
 
 
